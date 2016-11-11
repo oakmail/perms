@@ -77,7 +77,7 @@ But not
 ## Basic Usage
 
 Permissions takes one or more permissions configuration or `PConf`s and assembles a 
-`PermissionsWeb`
+`Web`
 
 
 `PConf`s are JSON and can look like any of the following.
@@ -151,4 +151,9 @@ or even
 ```
 
 Pconfs can stack up. If multiple pconfs provide `users` over and over again, the loaded users 
-will __not__ be overwritten. Users and groups must be explicitely deleted.
+will __not__ be overwritten. If multiple pconfs declare the same user or group, it will be overwritten.
+Users and groups must be explicitely deleted.
+
+If a group is mention that does not exist, parising will not fail. A new group with no permissions will be created instead.
+
+The order in which PConfs are provided to the web is important as well
