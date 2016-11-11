@@ -22,4 +22,10 @@ func TestWhitespace(t *testing.T) {
 	if !whitespace.Only(str) {
 		t.Fatalf("%q should be only whitespace", str)
 	}
+
+	str = whitespace.Strip(str)
+
+	if str != "" {
+		t.Fatalf("%q should be empty", str)
+	}
 }

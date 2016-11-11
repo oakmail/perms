@@ -1,5 +1,7 @@
 package whitespace
 
+import "bytes"
+
 //Is checks if a rune is whitespace
 func Is(r rune) bool {
 	switch r {
@@ -76,4 +78,15 @@ func Only(str string) bool {
 		}
 	}
 	return true
+}
+
+//Strip removes any whitespaces from a string
+func Strip(str string) (cleanStr string) {
+	buf := new(bytes.Buffer)
+	for _, c := range str {
+		if !Is(c) {
+			buf.WriteRune(c)
+		}
+	}
+	return buf.String()
 }
