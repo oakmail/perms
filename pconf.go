@@ -26,3 +26,12 @@ func ParsePConf(byt []byte) (*PConf, error) {
 	}
 	return &pconf, nil
 }
+
+//MustParsePConf parses the conf or panics trying
+func MustParsePConf(byt []byte) *PConf {
+	pcon, err := ParsePConf(byt)
+	if err != nil {
+		panic(err)
+	}
+	return pcon
+}

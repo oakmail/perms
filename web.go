@@ -37,6 +37,19 @@ func (w *Web) AddPConf(p *PConf) error {
 		}
 		group.Parents = unprocessedGroup.Parents
 	}
+	for name, unprocessedUser := range p.Users {
+		user := NewUser(name)
+		w.users[name] = user
+
+		for _, nodeStr := range unprocessedUser.Nodes {
+			node, err := ParseNode(nodeStr)
+			if err != nil {
+				return errors.Wrapf(err, "failed to parse node %q", nodeStr)
+			}
+			user.Nodes = append(user.Nodes, node)
+		}
+		user.Groups = unprocessedUser.Groups
+	}
 	return nil
 }
 
@@ -96,7 +109,7 @@ func (w *Web) CheckUserHasPermission(name string, check Node) bool {
 		if group == nil {
 			continue
 		}
-		matched, negated := CheckNode(group, check)
+		matched, negated = CheckNode(group, check)
 		if negated {
 			//If it is ever negated now we know they don't have the node
 			return false
