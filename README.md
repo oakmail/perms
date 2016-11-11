@@ -121,13 +121,13 @@ Permissions takes one or more permissions configuration or `PConf`s and assemble
 or even
 
 ```js
-{
+	{
     "groups": {
         "project_lead": {
             "nodes": [
                 "analytics.*"
             ]
-        }
+        },
         "manager": {
             "parents": [
                 "project_lead"
@@ -144,7 +144,7 @@ or even
             ],
             "nodes": [
                 "-projects.*.chat.moderate"
-            ],
+            ]
         }
     }
 }
