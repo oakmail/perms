@@ -1,4 +1,4 @@
-package permissions
+package perms
 
 import (
 	"reflect"
@@ -36,6 +36,14 @@ func TestParseNode(t *testing.T) {
 	}
 }
 
+func BenchmarkParseNode(b *testing.B) {
+	permString := "projects.webserver.use"
+
+	for i := 0; i < b.N; i++ {
+		ParseNode(permString)
+	}
+}
+
 func TestNode_Match(t *testing.T) {
 	type args struct {
 		check Node
@@ -65,5 +73,67 @@ func TestNode_Match(t *testing.T) {
 				t.Errorf("Node.Check() = %v, want %v", got, tt.want)
 			}
 		})
+	}
+}
+
+func BenchmarkNode_Match(b *testing.B) {
+	b.Run("simple", func(b *testing.B) {
+		node := MustParseNode("projects.backend.use")
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			node.Match(node)
+		}
+	})
+	b.Run("wildcard", func(b *testing.B) {
+		node := MustParseNode("*")
+		checkNode := MustParseNode("projects.backend.use")
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			node.Match(checkNode)
+		}
+	})
+	b.Run("middle_wildcard", func(b *testing.B) {
+		node := MustParseNode("projects.*.use")
+		checkNode := MustParseNode("projects.backend.use")
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			node.Match(checkNode)
+		}
+	})
+}
+
+func TestNode_String(t *testing.T) {
+	type fields struct {
+		Namespaces []string
+		Negate     bool
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   string
+	}{
+		{"simple", fields{Namespaces: []string{"projects", "backend"}}, "projects.backend"},
+		{"supernode", fields{Namespaces: []string{"*"}}, "*"},
+		{"negate", fields{Namespaces: []string{"billing", "*"}, Negate: true}, "-billing.*"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			n := Node{
+				Namespaces: tt.fields.Namespaces,
+				Negate:     tt.fields.Negate,
+			}
+			if got := n.String(); got != tt.want {
+				t.Errorf("Node.String() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func BenchmarkNode_String(b *testing.B) {
+	node := MustParseNode("-billing.credit_cards.view")
+	b.ResetTimer()
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		node.String()
 	}
 }

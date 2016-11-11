@@ -1,6 +1,7 @@
-package permissions
+package perms
 
 import (
+	"bytes"
 	"strings"
 
 	"github.com/pkg/errors"
@@ -56,6 +57,15 @@ func ParseNode(raw string) (Node, error) {
 	}, nil
 }
 
+//MustParseNode panics if an error occurs while parsing the node
+func MustParseNode(raw string) Node {
+	node, err := ParseNode(raw)
+	if err != nil {
+		panic(err)
+	}
+	return node
+}
+
 //Match checks if a node matches another node.
 //it is unaware of negation.
 func (n Node) Match(check Node) bool {
@@ -79,4 +89,19 @@ func (n Node) Match(check Node) bool {
 	}
 
 	return !(len(check.Namespaces) < len(n.Namespaces))
+}
+
+//String returns the string representation of the node
+func (n Node) String() string {
+	buf := new(bytes.Buffer)
+	if n.Negate {
+		buf.WriteByte('-')
+	}
+	for i, namespace := range n.Namespaces {
+		buf.WriteString(namespace)
+		if i != (len(n.Namespaces) - 1) {
+			buf.WriteByte('.')
+		}
+	}
+	return buf.String()
 }
