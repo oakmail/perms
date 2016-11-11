@@ -56,30 +56,9 @@ func ParseNode(raw string) (Node, error) {
 	}, nil
 }
 
-//Check checks if n permits check and considers negation
-func (n Node) Check(check Node) bool {
-	matched := n.Check(check)
-
-	if matched {
-		if check.Negate && n.Negate {
-			return true
-		}
-		if check.Negate {
-			return false
-		}
-		return matched
-	}
-
-	return false
-}
-
 //Match checks if a node matches another node.
 //it is unaware of negation.
 func (n Node) Match(check Node) bool {
-	//If either node is empty the check fails
-	if len(n.Namespaces) == 0 || len(check.Namespaces) == 0 {
-		return false
-	}
 	var lastWildcard bool
 
 	for i, namespace := range check.Namespaces {

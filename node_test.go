@@ -20,6 +20,7 @@ func TestParseNode(t *testing.T) {
 		{"negate", args{"-projects.manage.*"}, Node{Namespaces: []string{"projects", "manage", "*"}, Negate: true}, false},
 		{"whitespace", args{"- projects.manage.*"}, Node{}, true},
 		{"empty", args{"..*"}, Node{}, true},
+		{"empty", args{""}, Node{}, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -35,7 +36,7 @@ func TestParseNode(t *testing.T) {
 	}
 }
 
-func TestNode_Check(t *testing.T) {
+func TestNode_Match(t *testing.T) {
 	type args struct {
 		check Node
 	}
@@ -44,41 +45,24 @@ func TestNode_Check(t *testing.T) {
 		n    Node
 		args args
 		want bool
-	}{}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.n.Check(tt.args.check); got != tt.want {
-				t.Errorf("Node.Check() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestNode_Match(t *testing.T) {
-	type fields struct {
-		Namespaces []string
-		Negate     bool
-	}
-	type args struct {
-		check Node
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		args   args
-		want   bool
 	}{
-	// TODO: Add test cases.
+		{"simple", Node{Namespaces: []string{"projects", "webserver"}}, args{Node{Namespaces: []string{"projects", "webserver"}}}, true},
+		{"simple", Node{Namespaces: []string{"projects", "webserver"}}, args{Node{Namespaces: []string{"projects", "frontend"}}}, false},
+
+		{"wildcard", Node{Namespaces: []string{"projects", "*"}}, args{Node{Namespaces: []string{"projects", "frontend"}}}, true},
+		{"wildcard", Node{Namespaces: []string{"projects", "*"}}, args{Node{Namespaces: []string{"billing", "frontend"}}}, false},
+
+		{"middle_wildcard", Node{Namespaces: []string{"projects", "*", "chat"}}, args{Node{Namespaces: []string{"projects", "test"}}}, false},
+		{"middle_wildcard", Node{Namespaces: []string{"projects", "*", "chat"}}, args{Node{Namespaces: []string{"projects", "test", "test"}}}, false},
+		{"middle_wildcard", Node{Namespaces: []string{"projects", "*", "chat"}}, args{Node{Namespaces: []string{"projects", "test", "chat"}}}, true},
+
+		{"supernode", Node{Namespaces: []string{"*"}}, args{Node{Namespaces: []string{"projects", "test", "chat"}}}, true},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			n := Node{
-				Namespaces: tt.fields.Namespaces,
-				Negate:     tt.fields.Negate,
-			}
-			if got := n.Match(tt.args.check); got != tt.want {
-				t.Errorf("Node.Match() = %v, want %v", got, tt.want)
+			if got := tt.n.Match(tt.args.check); got != tt.want {
+				t.Errorf("Node.Check() = %v, want %v", got, tt.want)
 			}
 		})
 	}
