@@ -6,11 +6,11 @@ An extremely flexible permissions system
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
-- [Permissions](#permissions)
-  - [Node](#node)
-    - [Wildcards](#wildcards)
-    - [Negations](#negations)
-  - [Basic Usage](#basic-usage)
+- [Nodes](#nodes)
+  - [Important Considerations](#important-considerations)
+  - [Wildcards](#wildcards)
+  - [Negations](#negations)
+- [Basic Usage](#basic-usage)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
