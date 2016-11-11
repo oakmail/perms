@@ -1,7 +1,7 @@
 package whitespace
 
-//IsWhitespace checks if a rune is whitespace
-func IsWhitespace(r rune) bool {
+//Is checks if a rune is whitespace
+func Is(r rune) bool {
 	switch r {
 	case '\u0009':
 		return true
@@ -58,20 +58,20 @@ func IsWhitespace(r rune) bool {
 	return false
 }
 
-//ContainsWhitespace checks if str contain whitespaces
-func ContainsWhitespace(str string) bool {
+//Contains checks if str contain whitespaces
+func Contains(str string) bool {
 	for _, c := range str {
-		if IsWhitespace(c) {
+		if Is(c) {
 			return true
 		}
 	}
 	return false
 }
 
-//OnlyWhitespace checks if a string is only whitespace
-func OnlyWhitespace(str string) bool {
+//Only checks if a string is only whitespace
+func Only(str string) bool {
 	for _, c := range str {
-		if !IsWhitespace(c) {
+		if !Is(c) {
 			return false
 		}
 	}

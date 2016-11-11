@@ -8,18 +8,18 @@ import (
 
 func TestWhitespace(t *testing.T) {
 	str := " train "
-	if !whitespace.ContainsWhitespace(str) {
+	if !whitespace.Contains(str) {
 		t.Fatalf("%q should contain whitespace", str)
 	}
 
 	str = "train"
-	if whitespace.ContainsWhitespace(str) {
+	if whitespace.Contains(str) {
 		t.Fatalf("%q should not contain whitespace", str)
 	}
 
 	str = "   \n\n"
 
-	if !whitespace.OnlyWhitespace(str) {
+	if !whitespace.Only(str) {
 		t.Fatalf("%q should be only whitespace", str)
 	}
 }
