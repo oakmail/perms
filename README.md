@@ -10,7 +10,8 @@ An extremely flexible permissions system
   - [Important Considerations](#important-considerations)
   - [Wildcards](#wildcards)
   - [Negations](#negations)
-- [Basic Usage](#basic-usage)
+  - [List](#list)
+- [PConf](#pconf)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -73,8 +74,27 @@ But not
 
 - `projects.webserver.use`
 
+### List
 
-## Basic Usage
+The standard way to list nodes is to delimit them with whitespace. Redudent whitespaces are ignored.
+
+The following lists are functionally identitical.
+
+```
+projects.publish projects.manage
+```
+
+```
+projects.publish
+projects.manage
+```
+
+use `ParseNodes()` to parse a list of nodes.
+
+`Nodes.String()` return a newline delimited string of nodes.
+
+## PConf
+A built in permission system is provided via PConfs
 
 Permissions takes one or more permissions configuration or `PConf`s and assembles a 
 `Web`

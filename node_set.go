@@ -2,11 +2,11 @@ package perms
 
 //NodeSet defines a kind of object that owns nodes
 type NodeSet interface {
-	GetNodes() []Node
+	GetNodes() Nodes
 }
 
-//CheckNode checks a node set for a permission
-func CheckNode(ns NodeSet, check Node) (matched bool, negated bool) {
+//Check checks a node set for a permission
+func Check(ns NodeSet, check Node) (matched bool, negated bool) {
 	for _, node := range ns.GetNodes() {
 		if node.Match(check) {
 			matched = true

@@ -93,7 +93,7 @@ func (w *Web) CheckUserHasPermission(name string, check Node) bool {
 	}
 
 	//Check user's direct permissions first
-	matched, negated := CheckNode(user, check)
+	matched, negated := Check(user, check)
 
 	if negated {
 		return false
@@ -109,7 +109,7 @@ func (w *Web) CheckUserHasPermission(name string, check Node) bool {
 		if group == nil {
 			continue
 		}
-		matched, negated = CheckNode(group, check)
+		matched, negated = Check(group, check)
 		if negated {
 			//If it is ever negated now we know they don't have the node
 			return false

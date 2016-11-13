@@ -7,7 +7,7 @@ func TestCheckNode(t *testing.T) {
 
 	u.Nodes = []Node{MustParseNode("projects.test"), MustParseNode("projects.build"), MustParseNode("projects.chat")}
 
-	matched, negated := CheckNode(u, MustParseNode("projects.test"))
+	matched, negated := Check(u, MustParseNode("projects.test"))
 
 	if negated {
 		t.Fatalf("negated should be false")
@@ -19,7 +19,7 @@ func TestCheckNode(t *testing.T) {
 
 	u.Nodes = append(u.Nodes, MustParseNode("-projects.test"))
 
-	matched, negated = CheckNode(u, MustParseNode("projects.test"))
+	matched, negated = Check(u, MustParseNode("projects.test"))
 
 	if !negated {
 		t.Fatalf("negated should be true")
