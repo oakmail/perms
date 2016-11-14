@@ -58,6 +58,9 @@ func (ns Nodes) GetNodes() Nodes {
 
 //String returns a string representation of n
 func (ns Nodes) String() string {
+	if ns == nil {
+		return ""
+	}
 	buf := new(bytes.Buffer)
 	for k, n := range ns {
 		buf.WriteString(n.String())

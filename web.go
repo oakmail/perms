@@ -103,21 +103,33 @@ func (w *Web) CheckUserHasPermission(name string, check Node) bool {
 
 	//Matched has to be false here
 
+	if defaultGroup, exists := w.groups["default"]; exists {
+		thisMatched, negated := Check(defaultGroup, check)
+		if negated {
+			return false
+		}
+		if thisMatched {
+			matched = true
+		}
+	}
+	//fmt.Printf("Node %v Matched %v\n", check, matched)
+
 	//Check user's groups for permissions
 	for _, groupName := range user.Groups {
 		group := w.groups[groupName]
 		if group == nil {
 			continue
 		}
-		matched, negated = Check(group, check)
+		thisMatched, negated := Check(group, check)
 		if negated {
 			//If it is ever negated now we know they don't have the node
 			return false
 		}
-		if matched {
+		if thisMatched {
 			matched = true
 		}
 	}
+	//fmt.Printf("Node %v Matched %v\n", check, matched)
 
 	return matched
 }

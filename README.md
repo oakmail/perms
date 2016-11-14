@@ -177,3 +177,5 @@ Users and groups must be explicitely deleted.
 If a group is mention that does not exist, parising will not fail. A new group with no permissions will be created instead.
 
 The order in which PConfs are provided to the web is important as well
+
+Note that the `default` group will be inherited by all users.
