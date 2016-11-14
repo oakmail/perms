@@ -17,7 +17,4 @@ func TestNewGroup(t *testing.T) {
 		t.Fatalf("gr.Parents should be instantiated")
 	}
 
-	if gr.GetNodes() == nil {
-		t.Fatalf("gr.GetNodes() should be instantiated")
-	}
 }

@@ -22,9 +22,22 @@ type PConf struct {
 	Users  map[string]pconfUser  `json:"users"`
 }
 
+//newPConf returns an instantiated pconf
+func newPConf() *PConf {
+	pc := &PConf{}
+	pc.Groups = make(map[string]pconfGroup)
+	pc.Users = make(map[string]pconfUser)
+	return pc
+}
+
 //Marshal generates the marshalled version of the pconf
 func (pc *PConf) Marshal() ([]byte, error) {
 	return json.Marshal(pc)
+}
+
+//PrettyMarshal marshals pc and returns human readable output
+func (pc *PConf) PrettyMarshal() ([]byte, error) {
+	return json.MarshalIndent(pc, "", "    ")
 }
 
 //ParsePConf parses a pconf

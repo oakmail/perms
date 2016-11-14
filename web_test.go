@@ -1,6 +1,7 @@
 package perms
 
 import (
+	"fmt"
 	"os"
 	"reflect"
 	"testing"
@@ -97,4 +98,29 @@ func TestWeb_PrettyDump(t *testing.T) {
 	})
 
 	web.PrettyDump(os.Stdout)
+}
+
+func TestWeb_MasterPConf(t *testing.T) {
+	if !testing.Verbose() {
+		return
+	}
+
+	web := NewWeb()
+
+	web.AddGroup(&Group{
+		Name:  "admin",
+		Nodes: MustParseNodes([]byte("testing.create testing.poop testing.weewee")),
+	})
+
+	web.AddUser(&User{
+		Name:  "ahmad",
+		Nodes: MustParseNodes([]byte("ammar.edit ammar.poo ammar.pee")),
+	})
+
+	raw, err := web.MasterPConf().PrettyMarshal()
+	if err != nil {
+		t.Fatalf("Failed to generate master pconf: %v", err)
+	}
+
+	fmt.Printf("MasterPconf\n %s\n", raw)
 }

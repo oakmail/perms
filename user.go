@@ -15,8 +15,3 @@ func NewUser(name string) *User {
 		Nodes:  make(Nodes, 0, 5),
 	}
 }
-
-//GetNodes returns all users nodes
-func (u *User) GetNodes() Nodes {
-	return u.Nodes
-}

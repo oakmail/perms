@@ -16,8 +16,4 @@ func TestNewUser(t *testing.T) {
 	if u.Groups == nil {
 		t.Fatalf("u.Groups should be instantiated")
 	}
-
-	if u.GetNodes() == nil {
-		t.Fatalf("u.GetNodes() should be instantiated")
-	}
 }

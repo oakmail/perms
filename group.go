@@ -15,8 +15,3 @@ func NewGroup(name string) *Group {
 		Nodes:   make(Nodes, 0, 5),
 	}
 }
-
-//GetNodes returns all group nodes
-func (g *Group) GetNodes() Nodes {
-	return g.Nodes
-}

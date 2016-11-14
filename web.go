@@ -55,6 +55,12 @@ func (w *Web) AddPConf(p *PConf) error {
 
 //AddUser adds a user to the web
 func (w *Web) AddUser(u *User) {
+	if u.Groups == nil {
+		u.Groups = []string{}
+	}
+	if u.Nodes == nil {
+		u.Nodes = Nodes{}
+	}
 	w.users[u.Name] = u
 }
 
@@ -68,8 +74,15 @@ func (w *Web) DelUser(name string) {
 	delete(w.users, name)
 }
 
-//AddGroup adds a group to the web
+//AddGroup adds a group to the web.
+//It instantiates nil values
 func (w *Web) AddGroup(g *Group) {
+	if g.Nodes == nil {
+		g.Nodes = Nodes{}
+	}
+	if g.Parents == nil {
+		g.Parents = []string{}
+	}
 	w.groups[g.Name] = g
 }
 
@@ -135,14 +148,21 @@ func (w *Web) CheckUserHasPermission(name string, check Node) bool {
 }
 
 //MasterPConf generates a serialized master pconf
-func (w *Web) MasterPConf() (pconf []byte, err error) {
-	pc := &PConf{}
+func (w *Web) MasterPConf() (pconf *PConf) {
+	pc := newPConf()
 	for name, group := range w.groups {
 		pc.Groups[name] = pconfGroup{
 			Parents: group.Parents,
 			Nodes:   group.Nodes.Strings(),
 		}
 	}
+	for name, user := range w.users {
+		pc.Users[name] = pconfUser{
+			Groups: user.Groups,
+			Nodes:  user.Nodes.Strings(),
+		}
+	}
+	return pc
 }
 
 //PrettyDump outputs a pretty version of the web to a writer
