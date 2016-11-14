@@ -51,9 +51,17 @@ func MustParseNodes(raw []byte) Nodes {
 	return n
 }
 
-//GetNodes returns n.
-func (ns Nodes) GetNodes() Nodes {
-	return ns
+//Check checks for a permission with ns
+func (ns Nodes) Check(check Node) (matched bool, negated bool) {
+	for _, node := range ns {
+		if node.Match(check) {
+			matched = true
+			if node.Negate {
+				return true, true
+			}
+		}
+	}
+	return matched, false
 }
 
 //String returns a string representation of n
@@ -69,4 +77,16 @@ func (ns Nodes) String() string {
 		}
 	}
 	return buf.String()
+}
+
+//Strings returns ns as a slice of it's individual strings
+func (ns Nodes) Strings() []string {
+	if ns == nil {
+		return []string{}
+	}
+	strs := make([]string, len(ns))
+	for i, node := range ns {
+		strs[i] = node.String()
+	}
+	return strs
 }

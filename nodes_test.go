@@ -80,3 +80,32 @@ func TestNodes_String(t *testing.T) {
 		})
 	}
 }
+
+func TestNodes_Check(t *testing.T) {
+	u := NewUser("ammar")
+
+	u.Nodes = Nodes{MustParseNode("projects.test"), MustParseNode("projects.build"), MustParseNode("projects.chat")}
+
+	matched, negated := u.Nodes.Check(MustParseNode("projects.test"))
+
+	if negated {
+		t.Fatalf("negated should be false")
+	}
+
+	if !matched {
+		t.Fatalf("matched should be true")
+	}
+
+	u.Nodes = append(u.Nodes, MustParseNode("-projects.test"))
+
+	matched, negated = u.Nodes.Check(MustParseNode("projects.test"))
+
+	if !negated {
+		t.Fatalf("negated should be true")
+	}
+
+	if !matched {
+		t.Fatalf("matched should be true")
+	}
+
+}

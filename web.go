@@ -93,7 +93,7 @@ func (w *Web) CheckUserHasPermission(name string, check Node) bool {
 	}
 
 	//Check user's direct permissions first
-	matched, negated := Check(user, check)
+	matched, negated := user.Nodes.Check(check)
 
 	if negated {
 		return false
@@ -104,7 +104,7 @@ func (w *Web) CheckUserHasPermission(name string, check Node) bool {
 	//Matched has to be false here
 
 	if defaultGroup, exists := w.groups["default"]; exists {
-		thisMatched, negated := Check(defaultGroup, check)
+		thisMatched, negated := defaultGroup.Nodes.Check(check)
 		if negated {
 			return false
 		}
@@ -120,7 +120,7 @@ func (w *Web) CheckUserHasPermission(name string, check Node) bool {
 		if group == nil {
 			continue
 		}
-		thisMatched, negated := Check(group, check)
+		thisMatched, negated := group.Nodes.Check(check)
 		if negated {
 			//If it is ever negated now we know they don't have the node
 			return false
@@ -132,6 +132,17 @@ func (w *Web) CheckUserHasPermission(name string, check Node) bool {
 	//fmt.Printf("Node %v Matched %v\n", check, matched)
 
 	return matched
+}
+
+//MasterPConf generates a serialized master pconf
+func (w *Web) MasterPConf() (pconf []byte, err error) {
+	pc := &PConf{}
+	for name, group := range w.groups {
+		pc.Groups[name] = pconfGroup{
+			Parents: group.Parents,
+			Nodes:   group.Nodes.Strings(),
+		}
+	}
 }
 
 //PrettyDump outputs a pretty version of the web to a writer
