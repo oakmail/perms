@@ -1,6 +1,7 @@
 package perms
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"reflect"
@@ -123,4 +124,37 @@ func TestWeb_MasterPConf(t *testing.T) {
 	}
 
 	fmt.Printf("MasterPconf\n %s\n", raw)
+}
+
+func TestWeb_JSON(t *testing.T) {
+	w := NewWeb()
+	expected := []byte(`{"groups":{},"users":{"ammar":{"groups":["slave","coder"],"nodes":["everything.*","-nothing"]}}}`)
+
+	t.Run("MarshalJSON", func(t *testing.T) {
+		_ = json.Marshaler(w)
+		w.AddUser(&User{
+			Name:   "ammar",
+			Groups: []string{"slave", "coder"},
+			Nodes:  MustParseNodes([]byte("everything.* -nothing")),
+		})
+		js, err := w.MarshalJSON()
+		if err != nil {
+			t.Fatalf("Failed to marshal: %v", err)
+		}
+		if !reflect.DeepEqual(js, expected) {
+			t.Errorf("js == %s\n", js)
+		}
+	})
+
+	t.Run("UnmarshalJSON", func(t *testing.T) {
+		_ = json.Unmarshaler(w)
+		w.Reset()
+
+		//this thing should be deleted
+		w.AddGroup(&Group{Name: "admin"})
+
+		if err := w.UnmarshalJSON(expected); err != nil {
+			t.Errorf("Failed to unmarshal: %v", err)
+		}
+	})
 }

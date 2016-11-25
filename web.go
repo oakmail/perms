@@ -16,10 +16,15 @@ type Web struct {
 
 //NewWeb returns an instantiated web
 func NewWeb() *Web {
-	return &Web{
-		groups: make(map[string]*Group, 20),
-		users:  make(map[string]*User, 20),
-	}
+	w := &Web{}
+	w.Reset()
+	return w
+}
+
+//Reset resets the state of w
+func (w *Web) Reset() {
+	w.groups = make(map[string]*Group, 20)
+	w.users = make(map[string]*User, 20)
 }
 
 //AddPConf adds a PConf to the web
@@ -163,6 +168,21 @@ func (w *Web) MasterPConf() (pconf *PConf) {
 		}
 	}
 	return pc
+}
+
+//MarshalJSON marshal's w into valid json
+func (w *Web) MarshalJSON() ([]byte, error) {
+	return w.MasterPConf().Marshal()
+}
+
+//UnmarshalJSON unmarshals json in b into w.
+//UnmarshalJSON resets the state of w.
+func (w *Web) UnmarshalJSON(b []byte) error {
+	pconf, err := ParsePConf(b)
+	if err != nil {
+		errors.Wrap(err, "failed to parse pconf")
+	}
+	return errors.Wrap(w.AddPConf(pconf), "failed to add pconf")
 }
 
 //PrettyDump outputs a pretty version of the web to a writer
