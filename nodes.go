@@ -2,6 +2,9 @@ package perms
 
 import (
 	"bytes"
+	"database/sql/driver"
+
+	"github.com/stratexio/sqltypes"
 
 	"github.com/stratexio/perms/whitespace"
 )
@@ -89,4 +92,29 @@ func (ns Nodes) Strings() []string {
 		strs[i] = node.String()
 	}
 	return strs
+}
+
+// Scan implements the SQL Scanner interface
+func (ns *Nodes) Scan(value interface{}) error {
+	if value == nil {
+		return nil
+	}
+
+	var input string
+	if err := sqltypes.ConvertAssign(&input, value); err != nil {
+		return err
+	}
+
+	nn, err := ParseNodes([]byte(input))
+	if err != nil {
+		return err
+	}
+
+	*ns = nn
+	return nil
+}
+
+// Value implements the SQL driver Valuer interface
+func (ns Nodes) Value() (driver.Value, error) {
+	return ns.String(), nil
 }

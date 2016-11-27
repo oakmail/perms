@@ -109,3 +109,28 @@ func TestNodes_Check(t *testing.T) {
 	}
 
 }
+
+func TestNodes_SQL(t *testing.T) {
+	input := "test.hello\ntest2.hello"
+	var nodes Nodes
+	if err := nodes.Scan(input); err != nil {
+		t.Fatalf("scanning nodes should not return an error; %s", nodes)
+	}
+
+	matched, negated := nodes.Check(MustParseNode("test.hello"))
+	if !matched {
+		t.Fatalf("matched should be true")
+	}
+	if negated {
+		t.Fatalf("negated should be false")
+	}
+
+	value, err := nodes.Value()
+	if err != nil {
+		t.Fatalf("Value should not return an error")
+	}
+	vstr := value.(string)
+	if vstr != input {
+		t.Fatalf("Value should return the same string as Scan input, got %s", vstr)
+	}
+}
