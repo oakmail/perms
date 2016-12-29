@@ -100,12 +100,14 @@ func (ns *Nodes) Scan(value interface{}) error {
 		return nil
 	}
 
-	var input string
+	var input []byte
 	if err := sqltypes.ConvertAssign(&input, value); err != nil {
 		return err
 	}
 
-	nn, err := ParseNodes([]byte(input))
+	input = bytes.Replace(input, []byte("\\n"), []byte("\n"), -1)
+
+	nn, err := ParseNodes(input)
 	if err != nil {
 		return err
 	}
