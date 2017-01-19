@@ -3,6 +3,7 @@ package perms
 import (
 	"bytes"
 	"database/sql/driver"
+	"encoding/json"
 
 	"github.com/stratexio/sqltypes"
 
@@ -76,7 +77,7 @@ func (ns Nodes) String() string {
 	for k, n := range ns {
 		buf.WriteString(n.String())
 		if k != (len(ns) - 1) {
-			buf.WriteByte('\n')
+			buf.WriteByte(' ')
 		}
 	}
 	return buf.String()
@@ -119,4 +120,14 @@ func (ns *Nodes) Scan(value interface{}) error {
 // Value implements the SQL driver Valuer interface
 func (ns Nodes) Value() (driver.Value, error) {
 	return ns.String(), nil
+}
+
+// MarshalJSON implements the JSON marshaller interface
+func (ns *Nodes) MarshalJSON() ([]byte, error) {
+	return json.Marshal(ns.String())
+}
+
+// UnmarshalJSON implements the JSON unmarshaller interface
+func (ns *Nodes) UnmarshalJSON(b []byte) error {
+	return json.Unmarshal(b, ns)
 }
