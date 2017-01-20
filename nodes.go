@@ -123,11 +123,23 @@ func (ns Nodes) Value() (driver.Value, error) {
 }
 
 // MarshalJSON implements the JSON marshaller interface
-func (ns *Nodes) MarshalJSON() ([]byte, error) {
+func (ns Nodes) MarshalJSON() ([]byte, error) {
 	return json.Marshal(ns.String())
 }
 
 // UnmarshalJSON implements the JSON unmarshaller interface
-func (ns *Nodes) UnmarshalJSON(b []byte) error {
-	return json.Unmarshal(b, ns)
+func (ns Nodes) UnmarshalJSON(b []byte) error {
+	var data string
+	if err := json.Unmarshal(b, &data); err != nil {
+		return err
+	}
+
+	nodes, err := ParseNodes([]byte(data))
+	if err != nil {
+		return err
+	}
+
+	ns = nodes
+
+	return nil
 }
