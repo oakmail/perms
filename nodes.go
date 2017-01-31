@@ -113,7 +113,7 @@ func (ns Nodes) Scan(value interface{}) error {
 		return err
 	}
 
-	*ns = nn
+	ns = nn
 	return nil
 }
 
