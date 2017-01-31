@@ -96,7 +96,7 @@ func (ns Nodes) Strings() []string {
 }
 
 // Scan implements the SQL Scanner interface
-func (ns Nodes) Scan(value interface{}) error {
+func (ns *Nodes) Scan(value interface{}) error {
 	if value == nil {
 		return nil
 	}
@@ -113,7 +113,7 @@ func (ns Nodes) Scan(value interface{}) error {
 		return err
 	}
 
-	ns = nn
+	*ns = nn
 	return nil
 }
 
