@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
-	"github.com/stratexio/perms/whitespace"
+	"github.com/trtlio/perms/whitespace"
 )
 
 //NamespaceSeperator seperates node namespaces

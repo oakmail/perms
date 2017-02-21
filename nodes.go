@@ -5,9 +5,9 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 
-	"github.com/stratexio/sqltypes"
+	"github.com/trtlio/sqltypes"
 
-	"github.com/stratexio/perms/whitespace"
+	"github.com/trtlio/perms/whitespace"
 )
 
 //Nodes is a list of nodes
