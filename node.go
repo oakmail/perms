@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"strings"
 
+	"github.com/oakmail/perms/whitespace"
 	"github.com/pkg/errors"
-	"github.com/trtlio/perms/whitespace"
 )
 
 //NamespaceSeperator seperates node namespaces

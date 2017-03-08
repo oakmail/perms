@@ -5,9 +5,9 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 
-	"github.com/trtlio/sqltypes"
+	"github.com/oakmail/sqltypes"
 
-	"github.com/trtlio/perms/whitespace"
+	"github.com/oakmail/perms/whitespace"
 )
 
 //Nodes is a list of nodes

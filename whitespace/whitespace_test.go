@@ -3,7 +3,7 @@ package whitespace_test
 import (
 	"testing"
 
-	"github.com/trtlio/perms/whitespace"
+	"github.com/oakmail/perms/whitespace"
 )
 
 func TestWhitespace(t *testing.T) {
